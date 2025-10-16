@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
@@ -56,12 +56,12 @@ function RouteComponent() {
 
           <p className="text-center text-gray-500 mt-6">
             Belum punya akun?{" "}
-            <a
-              href="/register"
-              className="text-blue-600 font-medium hover:underline"
+            <Link
+              to="/auth/register"
+              className="text-blue-600  font-medium hover:underline"
             >
               Daftar sekarang
-            </a>
+            </Link>
           </p>
         </form>
       </div>
