@@ -1,6 +1,10 @@
-import { io } from "socket.io-client";
+// socket.ts
+export const socket = new WebSocket("ws://localhost:4000/api/ws/connect");
 
-export const socket = io("http://localhost:4000/api/ws/connect", {
-  transports: ["websocket"],
-  autoConnect: false,
-});
+export function sendMessage(msg: string) {
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(msg);
+  } else {
+    console.warn("⚠️ WebSocket belum siap.");
+  }
+}

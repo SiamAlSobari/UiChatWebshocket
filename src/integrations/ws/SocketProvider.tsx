@@ -1,47 +1,54 @@
 import React from "react";
-import { socket } from "./socket";
 
-// 1️⃣ Buat context untuk socket dan status koneksi
-const SocketContext = React.createContext({
-  socket,
+type SocketContextType = {
+  socket: WebSocket | null;
+  isConnected: boolean;
+};
+
+const SocketContext = React.createContext<SocketContextType>({
+  socket: null,
   isConnected: false,
 });
 
-// 2️⃣ Provider component
 export function SocketProvider({ children }: { children: React.ReactNode }) {
-  const [isConnected, setIsConnected] = React.useState(socket.connected);
+  const [isConnected, setIsConnected] = React.useState(false);
+  const [ws, setWs] = React.useState<WebSocket | null>(null);
 
   React.useEffect(() => {
-    socket.connect();
+    // Buka koneksi baru
+    const newSocket = new WebSocket("ws://localhost:4000/api/ws/connect");
+    setWs(newSocket);
 
-    function onConnect() {
+    newSocket.onopen = () => {
       setIsConnected(true);
       console.log("✅ WebSocket connected");
-    }
+    };
 
-    function onDisconnect() {
+    newSocket.onclose = () => {
       setIsConnected(false);
       console.log("❌ WebSocket disconnected");
-    }
+    };
 
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
+    newSocket.onerror = (err) => {
+      console.error("⚠️ WebSocket error:", err);
+    };
+
+    newSocket.onmessage = (event) => {
+      console.log("📨 Message from server:", event.data);
+    };
 
     return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-      socket.disconnect();
+      newSocket.close();
     };
   }, []);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
+    <SocketContext.Provider value={{ socket: ws, isConnected }}>
       {children}
     </SocketContext.Provider>
   );
 }
 
-// 3️⃣ Custom hook biar gampang dipakai di mana aja
 export function useSocket() {
   return React.useContext(SocketContext);
 }
