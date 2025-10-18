@@ -15,7 +15,7 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
-      <SocketProvider>
+      <SocketProvider userId="user1">
         <Outlet />
       </SocketProvider>
       <TanStackDevtools
