@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createSocket } from '../../common/helpers/socket';
 
-	const { connect, sendMessage } = createSocket();
+	const { sendMessage } = createSocket();
 
 	let inputText = '';
 

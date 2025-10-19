@@ -32,6 +32,10 @@ export function createSocket() {
 	}
 
 	function sendMessage(message: string) {
+		if (!ws || ws.readyState !== WebSocket.OPEN) {
+			console.error('WebSocket is not open');
+			return;
+		}
 		ws?.send(
 			JSON.stringify({
 				type: 'message',
