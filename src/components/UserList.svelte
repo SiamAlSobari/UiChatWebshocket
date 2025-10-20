@@ -31,7 +31,7 @@
 </script>
 
 <section
-	class="w-96 border-r border-gray-200/70 bg-white/70 backdrop-blur-md p-4 flex flex-col gap-4"
+	class="w-96 border-r border-gray-200/70 bg-amber-50/5 backdrop-blur-md p-4 flex flex-col gap-4"
 >
 	<div>
 		<InputGroup.Root>

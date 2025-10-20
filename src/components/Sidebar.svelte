@@ -18,7 +18,7 @@
 
 <aside class="flex min-h-screen bg-amber-50/30">
 	<section
-		class="flex flex-col items-center border-r border-gray-300/50 w-16 py-4 bg-white/60 backdrop-blur-md"
+		class="flex flex-col items-center border-r bg-amber-50/5 border-gray-300/50 w-16 py-4 backdrop-blur-md"
 	>
 		{#each navItems as item (item.id)}
 			<div class="relative group mb-3">
@@ -51,7 +51,7 @@
 	{/if}
 
 	<main class="flex-1 bg-white/50 p-6">
-		{#if !currentUserId}
+		{#if !currentUserId.current}
 			<Blank />
 		{:else}
 			{@render children()}
