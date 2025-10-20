@@ -1,4 +1,3 @@
-import { onDestroy } from 'svelte';
 import { writable } from 'svelte/store';
 
 export function createSocket() {

@@ -17,8 +17,9 @@
 	<input
 		bind:value={inputText}
 		placeholder="Ketik pesan..."
-		class="border p-2 rounded flex-1"
+		class="border w-full p-2 rounded flex-1"
 	/>
+	<a href="/">ssa</a>
 	<button on:click={handleSend} class="bg-blue-500 text-white px-4 py-2 rounded">
 		Kirim
 	</button>

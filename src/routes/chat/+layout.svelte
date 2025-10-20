@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { createSocket } from '../../common/helpers/socket';
+	import Sidebar from '../../common/components/layouts/Sidebar.svelte';
 
-    let {children} = $props()
-    const { connect } = createSocket();
+	let { children } = $props();
+	const { connect } = createSocket();
 
-    onMount(() => {
-        connect();
-    });
+	onMount(() => {
+		connect();
+	});
 </script>
-{@render children()}
+
+<Sidebar >
+	<!-- {@render children()} -->
+</Sidebar>
