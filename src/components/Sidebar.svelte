@@ -1,6 +1,9 @@
 <script lang="ts">
-	import * as InputGroup from '$lib/components/ui/input-group/index';
-	import { MessageCircleMore, SearchIcon, Users } from '@lucide/svelte';
+	import { MessageCircleMore, Users } from '@lucide/svelte';
+	import UserList from './UserList.svelte';
+	import Blank from './Blank.svelte';
+	import { useStore } from '@tanstack/svelte-store';
+	import { selectedUser } from '../common/stores/currentUser';
 
 	let { children } = $props();
 
@@ -9,29 +12,8 @@
 		{ id: 2, title: 'Group', icon: Users }
 	];
 
-	const userList = [
-		{
-			id: 1,
-			name: 'John Doe',
-			avatar:
-				'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80'
-		},
-		{
-			id: 2,
-			name: 'Jane Smith',
-			avatar:
-				'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80'
-		},
-		{
-			id: 3,
-			name: 'Michael Lee',
-			avatar:
-				'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=200&q=80'
-		}
-	];
-
 	let currentNavId = $state(1);
-	let currentUser = $state(0);
+	const currentUserId = useStore(selectedUser);
 </script>
 
 <aside class="flex min-h-screen bg-amber-50/30">
@@ -62,40 +44,17 @@
 			</div>
 		{/each}
 	</section>
-
-	<section
-		class="w-96 border-r border-gray-200/70 bg-white/70 backdrop-blur-md p-4 flex flex-col gap-4"
-	>
-		<div>
-			<InputGroup.Root>
-				<InputGroup.Input placeholder="Search" />
-				<InputGroup.Addon>
-					<SearchIcon class="w-5 h-5 text-gray-500" />
-				</InputGroup.Addon>
-			</InputGroup.Root>
-		</div>
-
-		<div class="flex flex-col gap-1 overflow-y-auto">
-			{#each userList as user}
-				<button
-					onclick={() => (currentUser = user.id)}
-					class={`flex items-center gap-3 px-3 py-2 ${currentUser === user.id ? 'bg-gray-200' : ''} rounded-lg hover:bg-gray-100 cursor-pointer transition`}
-				>
-					<img
-						src={user.avatar}
-						alt={user.name}
-						class="w-10 h-10 rounded-full object-cover border border-gray-200"
-					/>
-					<div>
-						<p class="font-medium text-gray-800 text-sm">{user.name}</p>
-						<p class="text-xs text-gray-500">Online</p>
-					</div>
-				</button>
-			{/each}
-		</div>
-	</section>
+	{#if currentNavId === 1}
+		<UserList />
+	{:else if currentNavId === 2}
+		<UserList />
+	{/if}
 
 	<main class="flex-1 bg-white/50 p-6">
-		{@render children()}
+		{#if !currentUserId}
+			<Blank />
+		{:else}
+			{@render children()}
+		{/if}
 	</main>
 </aside>
