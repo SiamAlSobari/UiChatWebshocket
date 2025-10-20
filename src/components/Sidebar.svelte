@@ -18,9 +18,9 @@
 
 <aside class="flex min-h-screen">
 	<!-- Sidebar -->
-	<div class="flex sticky h-screen top-0 ">
+	<div class="flex sticky h-screen top-0">
 		<section
-			class="flex flex-col items-center border-r bg-amber-50/5 border-gray-300/50 w-16 py-4 backdrop-blur-md"
+			class="flex  z-[9999] flex-col items-center border-r bg-amber-50/5 border-gray-300/50 w-16 py-4 backdrop-blur-md"
 		>
 			{#each navItems as item (item.id)}
 				<div class="relative group mb-3">
@@ -54,7 +54,7 @@
 	</div>
 	<!-- end sidebar -->
 
-	<main class="flex-1 bg-white/50  overflow-auto">
+	<main class="flex-1 bg-white/50 overflow-auto">
 		{#if !currentUserId.current}
 			<Blank />
 		{:else}
