@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { createSocket } from '../../common/helpers/socket';
-	import Sidebar from '../../common/components/layouts/Sidebar.svelte';
+	import Sidebar from '../../components/Sidebar.svelte';
 
 	let { children } = $props();
 	const { connect } = createSocket();
@@ -12,5 +12,5 @@
 </script>
 
 <Sidebar >
-	<!-- {@render children()} -->
+	{@render children()}
 </Sidebar>
