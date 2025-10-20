@@ -13,7 +13,7 @@
 	}
 </script>
 
-<div class="p-4 flex gap-2">
+<div class="p-4 h-[900px] bg-amber-300 flex gap-2">
 	<input
 		bind:value={inputText}
 		placeholder="Ketik pesan..."
