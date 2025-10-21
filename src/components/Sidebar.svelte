@@ -20,7 +20,7 @@
 	<!-- Sidebar -->
 	<div class="flex sticky h-screen top-0">
 		<section
-			class="flex  z-[9999] flex-col items-center border-r bg-amber-50/5 border-gray-300/50 w-16 py-4 backdrop-blur-md"
+			class="flex z-[9999] flex-col items-center border-r bg-amber-50/5 border-gray-300/50 w-16 py-4 backdrop-blur-md"
 		>
 			{#each navItems as item (item.id)}
 				<div class="relative group mb-3">
