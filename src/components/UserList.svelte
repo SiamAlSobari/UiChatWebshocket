@@ -1,8 +1,7 @@
 <script lang="ts">
 	import * as InputGroup from '$lib/components/ui/input-group/index';
-	import { useStore } from '@tanstack/svelte-store';
 	import { SearchIcon } from '@lucide/svelte';
-	import { selectedUser, setCurrentUser } from '../common/stores/currentUser';
+	import { setCurrentUser } from '../common/stores/currentUser';
 	const userList = [
 		{
 			id: 1,
@@ -25,9 +24,7 @@
 	];
 	let currentUsers = $state(0);
 	let searchUser = $state('');
-	let filtered = $derived.by(() =>
-		userList.filter((user) => user.name.toLowerCase().includes(searchUser.toLowerCase()))
-	);
+	let filtered = $derived.by(() =>userList.filter((user) => user.name.toLowerCase().includes(searchUser.toLowerCase())));
 </script>
 
 <section
