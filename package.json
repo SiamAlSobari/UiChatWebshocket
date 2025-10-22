@@ -36,6 +36,7 @@
 		"@lucide/svelte": "^0.546.0",
 		"@tanstack/svelte-form": "^1.23.7",
 		"@tanstack/svelte-store": "^0.8.0",
+		"axios": "^1.12.2",
 		"zod": "^4.1.12"
 	}
 }
