@@ -35,15 +35,29 @@
 			id: 4,
 			chat_id: 1,
 			sender_id: 2,
-			content: 'Halo, apa kabar?'
+			content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus saepe vitae quod. Incidunt aliquid dicta atque autem beatae animi accusantium illo, voluptas quod pariatur vero laborum iusto corrupti, perferendis dolores."
 		}
 	];
 </script>
 
-<div class="overflow-auto flex-1 mb-2 p-2">
-	<div class="bg-amber-400 h-[900px] p-4 rounded">
-		<h1 class="text-2xl font-bold mb-4">Aplikasi Chat</h1>
-		<p class="text-gray-600">Selamat datang di aplikasi chat.</p>
+
+<div class="overflow-auto flex-1 mb-2 p-3 space-y-2">
+	<div class="flex flex-col gap-2">
+		{#each dummyChats as chat (chat.id)}
+			{#if chat.sender_id === 1}
+				<div class="flex justify-end">
+					<p class="bg-blue-500 text-white px-3 py-2 rounded-br-none rounded-2xl shadow-md">
+						{chat.content}
+					</p>
+				</div>
+			{:else}
+				<div class="flex justify-start">
+					<p class="bg-gray-300 text-gray-800 px-3 py-2 max-w-[70%] rounded-2xl rounded-tl-none shadow-md">
+						{chat.content}
+					</p>
+				</div>
+			{/if}
+		{/each}
 	</div>
 </div>
 
