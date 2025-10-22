@@ -11,6 +11,33 @@
 			inputText = '';
 		}
 	}
+
+	const dummyChats = [
+		{
+			id: 1,
+			chat_id: 1,
+			sender_id: 1,
+			content: 'Halo, apa kabar?'
+		},
+		{
+			id: 2,
+			chat_id: 1,
+			sender_id: 2,
+			content: 'Halo, apa kabar?'
+		},
+		{
+			id: 3,
+			chat_id: 1,
+			sender_id: 1,
+			content: 'Halo, apa kabar?'
+		},
+		{
+			id: 4,
+			chat_id: 1,
+			sender_id: 2,
+			content: 'Halo, apa kabar?'
+		}
+	];
 </script>
 
 <div class="overflow-auto flex-1 mb-2 p-2">
@@ -29,7 +56,8 @@
 	<Button
 		class="bg-amber-500 hover:bg-amber-600"
 		disabled={inputText.trim() === ''}
-		onclick={handleSend}>
+		onclick={handleSend}
+	>
 		Kirim
 	</Button>
 </div>

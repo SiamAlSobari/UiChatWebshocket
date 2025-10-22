@@ -7,7 +7,7 @@
 	};
 </script>
 
-<nav class=" bg-amber-100/45 rounded-md">
+<nav class=" bg-amber-100/45 border-b-2 border-gray-200 rounded-md">
 	<div class="flex gap-1 p-3 flex-row">
 		<img src={user.avatar} alt={user.name} class="w-10 h-10 rounded-full object-cover" />
 		<div class="flex flex-col">

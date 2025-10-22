@@ -1,6 +1,8 @@
 <script>
+
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	let show = $state(false);
 
@@ -24,6 +26,11 @@
 			</p>
 
 			<button
+			onclick={()=>{
+				goto('/chat',{
+					invalidateAll: true
+				})
+			}}
 				class="px-6 py-3 bg-amber-500 text-white font-semibold rounded-xl shadow-md hover:bg-amber-600 hover:shadow-lg transition-all duration-300"
 			>
 				Mulai Chat Sekarang
