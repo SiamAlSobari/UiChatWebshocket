@@ -14,6 +14,7 @@
 			.min(3, { message: 'Password minimal 3 karakter' })
 			.max(20, { message: 'Password maksimal 20 karakter' })
 	});
+
 	const form = createForm(() => ({
 		defaultValues: {
 			user_name: '',
