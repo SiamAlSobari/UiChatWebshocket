@@ -6,6 +6,8 @@
       "dependencies": {
         "@lucide/svelte": "^0.546.0",
         "@tanstack/svelte-form": "^1.23.7",
+        "@tanstack/svelte-query": "^6.0.3",
+        "@tanstack/svelte-query-devtools": "^6.0.0",
         "@tanstack/svelte-store": "^0.8.0",
         "axios": "^1.12.2",
         "zod": "^4.1.12",
@@ -194,9 +196,17 @@
 
     "@tanstack/form-core": ["@tanstack/form-core@1.24.3", "", { "dependencies": { "@tanstack/devtools-event-client": "^0.3.2", "@tanstack/store": "^0.7.7" } }, "sha512-e+HzSD49NWr4aIqJWtPPzmi+/phBJAP3nSPN8dvxwmJWqAxuB/cH138EcmCFf3+oA7j3BXvwvTY0I+8UweGPjQ=="],
 
+    "@tanstack/query-core": ["@tanstack/query-core@5.90.5", "", {}, "sha512-wLamYp7FaDq6ZnNehypKI5fNvxHPfTYylE0m/ZpuuzJfJqhR5Pxg9gvGBHZx4n7J+V5Rg5mZxHHTlv25Zt5u+w=="],
+
+    "@tanstack/query-devtools": ["@tanstack/query-devtools@5.90.1", "", {}, "sha512-GtINOPjPUH0OegJExZ70UahT9ykmAhmtNVcmtdnOZbxLwT7R5OmRztR5Ahe3/Cu7LArEmR6/588tAycuaWb1xQ=="],
+
     "@tanstack/store": ["@tanstack/store@0.8.0", "", {}, "sha512-Om+BO0YfMZe//X2z0uLF2j+75nQga6TpTJgLJQBiq85aOyZNIhkCgleNcud2KQg4k4v9Y9l+Uhru3qWMPGTOzQ=="],
 
     "@tanstack/svelte-form": ["@tanstack/svelte-form@1.23.7", "", { "dependencies": { "@tanstack/form-core": "1.24.3", "@tanstack/svelte-store": "^0.7.7" }, "peerDependencies": { "svelte": "^5.0.0" } }, "sha512-OrUH1nR+icLm3fTgyHj34fHHZS9F2o+Z/7a/EJE3PhH4YV3XOOmc/okes28UVeWypuBv7Iu/vCc9cEAD/6ltpA=="],
+
+    "@tanstack/svelte-query": ["@tanstack/svelte-query@6.0.3", "", { "dependencies": { "@tanstack/query-core": "5.90.5" }, "peerDependencies": { "svelte": "^5.25.0" } }, "sha512-+elBl7JMr5C5RVHYu/DMxH06IrDZPpORFm4Rtyg9Qe9ww6gvG9naCvPw5arMoMq7si4Y3pJDTuX8PbQgy/RRMQ=="],
+
+    "@tanstack/svelte-query-devtools": ["@tanstack/svelte-query-devtools@6.0.0", "", { "dependencies": { "@tanstack/query-devtools": "5.90.1", "esm-env": "^1.2.1" }, "peerDependencies": { "@tanstack/svelte-query": "^6.0.0", "svelte": "^5.25.0" } }, "sha512-YMvrLmQ/itQJ62WAV8+E0d7WsQlNUFOfKgijPxvHlIkBEZalKdF2BH0dIUsXc+as2xOdOZlSbR4Tw7c/hhli4w=="],
 
     "@tanstack/svelte-store": ["@tanstack/svelte-store@0.8.0", "", { "dependencies": { "@tanstack/store": "0.8.0" }, "peerDependencies": { "svelte": "^5.0.0" } }, "sha512-021leTSc5RqQHrDOFUZ23bP/avy/VngaM0NcWxwmA/jH24u1aQhcwh1LrOutxxbW4FdwpVnK425Ycb62QFlo/A=="],
 
