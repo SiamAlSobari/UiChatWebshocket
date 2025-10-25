@@ -24,7 +24,7 @@ class AuthService {
     }
 
     public async logoutUser(){
-        const nama= "siam"
+        
     }
 }
 
