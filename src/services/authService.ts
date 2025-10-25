@@ -22,8 +22,10 @@ class AuthService {
     public async loginUser(data:LoginDto){
         return await this.api.post("/auth/login", data);
     }
-    
-    public async logoutUser(){}
+
+    public async logoutUser(){
+        const nama= "siam"
+    }
 }
 
 export const authService = new AuthService();
