@@ -1,14 +1,18 @@
-<script>
+<script lang="ts">
 
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { useStore } from '@tanstack/svelte-store';
+	import { authSession } from '../common/stores/authSession';
 
 	let show = $state(false);
 
 	onMount(() => {
 		show = true;
 	});
+
+	const user = useStore(authSession)
 </script>
 
 <div
@@ -34,6 +38,7 @@
 				class="px-6 py-3 bg-amber-500 text-white font-semibold rounded-xl shadow-md hover:bg-amber-600 hover:shadow-lg transition-all duration-300"
 			>
 				Mulai Chat Sekarang
+
 			</button>
 		</div>
 	{/if}
