@@ -1,9 +1,13 @@
 export type AuthSession = {
-    user_id: string,
-    user_name: string
+    id: string,
+}
+
+
+export type ResponseSession = {
+    user: AuthSession
 }
 
 export type LoginDto = {
-    username: string,
+    email: string,
     password: string
 }

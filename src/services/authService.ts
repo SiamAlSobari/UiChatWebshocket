@@ -1,7 +1,7 @@
 import type { AxiosInstance } from "axios";
 import axios from "axios";
 import { BASE_URL } from "../common/helpers/baseUrl";
-import type { AuthSession, LoginDto } from "../common/types";
+import type { AuthSession, LoginDto, ResponseSession } from "../common/types";
 import { setAuthSession } from "../common/stores/authSession";
 
 class AuthService {
@@ -11,11 +11,12 @@ class AuthService {
             baseURL: BASE_URL,
             withCredentials: true,
         })
-    }
+    }   
 
-    public async startSession() : Promise<AuthSession>{
-        const response = await this.api.get<AuthSession>("/auth/session");
-        setAuthSession(response.data);
+    public async startSession() : Promise<{data: ResponseSession}> {
+        const response = await this.api.get<{data: ResponseSession}>("/auth/session");
+        setAuthSession(response.data.data.user);
+        console.log('✅ Session started:', response.data.data.user.id);
         return response.data;
     }
 
