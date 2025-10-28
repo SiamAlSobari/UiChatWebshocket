@@ -16,7 +16,6 @@ class AuthService {
     public async startSession() : Promise<{data: ResponseSession}> {
         const response = await this.api.get<{data: ResponseSession}>("/auth/session");
         setAuthSession(response.data.data.user);
-        console.log('✅ Session started:', response.data.data.user.id);
         return response.data;
     }
 
