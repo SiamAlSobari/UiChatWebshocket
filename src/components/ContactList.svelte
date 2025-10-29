@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { setCurrentUser } from '../common/stores/currentUser';
 	import type { Contact } from '../common/types';
 
@@ -20,7 +21,11 @@
 		{:else}
 			{#each contact as contact (contact.id)}
 				<button
-					onclick={() => ((currentUsers = contact.user.id), setCurrentUser(contact.user.id))}
+					onclick={() => (
+						(currentUsers = contact.user.id),
+						setCurrentUser(contact.user.id),
+						goto(`/chat/user/${contact.id}`)
+					)}
 					class={`flex items-center gap-3 px-3 py-2 ${
 						currentUsers === contact.user.id ? 'bg-gray-200' : ''
 					} rounded-lg hover:bg-gray-100 cursor-pointer transition`}
