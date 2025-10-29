@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { MessageCircleMore, Users } from '@lucide/svelte';
-	import UserList from './UserList.svelte';
+	import { MessageCircleMore} from '@lucide/svelte';
+	import UserList from './ChatList.svelte';
 	import Blank from './Blank.svelte';
 	import { useStore } from '@tanstack/svelte-store';
 	import { selectedUser } from '../common/stores/currentUser';
@@ -9,11 +9,11 @@
 
 	const navItems = [
 		{ id: 1, title: 'Chat', icon: MessageCircleMore },
-		{ id: 2, title: 'Group', icon: Users }
 	];
 
 	let currentNavId = $state(1);
 	const currentUserId = useStore(selectedUser);
+
 </script>
 
 <aside class="flex min-h-screen">
