@@ -1,5 +1,14 @@
+import type { ChatType } from "../enums/chatType"
+
 export type AuthSession = {
     id: string,
+}
+
+export type MessageStore = {
+    text: string
+    type: string
+    chatType: ChatType
+    roomId: string
 }
 
 

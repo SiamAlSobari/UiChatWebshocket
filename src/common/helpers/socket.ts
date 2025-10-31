@@ -1,48 +1,74 @@
 import { writable } from 'svelte/store';
+import { authSession } from '../stores/authSession';
+import type { ChatType } from '../enums/chatType';
+import { useStore } from '@tanstack/svelte-store';
+
+let ws: WebSocket | null = null;
+export const socketStore = writable<WebSocket | null>(null);
 
 export function createSocket() {
-	let socket = writable<WebSocket | null>(null);
-	let ws: WebSocket | null = null;
-	function connect() {
-		ws = new WebSocket('ws://localhost:4000/api/ws/connect');
-		socket.set(ws);
-		ws.onopen = () => {
-			console.log('✅ WebSocket connected');
-			ws?.send(
-				JSON.stringify({
-					type: 'init',
-					userId: 'user123' // nanti ganti dengan userId dinamis
-				})
-			);
-		};
+	const user = useStore(authSession);
 
-		ws.onmessage = (event) => {
-			console.log('📩 Message from server:', event.data);
-		};
-
-		ws.onclose = () => {
-			console.log('❌ Disconnected');
-			socket.set(null);
-		};
-
-		ws.onerror = (err) => {
-			console.error('⚠️ WebSocket error:', err);
-		};
-	}
-
-	function sendMessage(message: string) {
-		if (!ws || ws.readyState !== WebSocket.OPEN) {
-			console.error('WebSocket is not open');
+	async function connect() {
+		if (ws && ws.readyState === WebSocket.OPEN) {
+			console.log('♻️ WebSocket sudah aktif');
 			return;
 		}
-		ws?.send(
+
+		return new Promise<void>((resolve, reject) => {
+			ws = new WebSocket(`ws://localhost:3000/api/ws/connect?userId=${user?.current?.id}`);
+			socketStore.set(ws);
+
+			ws.onopen = () => {
+				console.log('✅ WebSocket connected');
+				resolve();
+			};
+
+			ws.onerror = (err) => {
+				console.error('⚠️ WebSocket error:', err);
+				reject(err);
+			};
+
+			ws.onclose = () => {
+				console.log('❌ Disconnected');
+				socketStore.set(null);
+				ws = null;
+			};
+
+			ws.onmessage = (event) => {
+				const data = JSON.parse(event.data);
+				switch (data.type) {
+					case 'connected':
+						console.log(`📨 User ${data.userId} connected`);
+						console.log(`Dengan RoomId: ${JSON.stringify(data.roomIds)}`);
+						break;
+					default:
+						console.log('📨 Pesan diterima:', event.data);
+				}
+			};
+		});
+	}
+
+	function sendMessage(text: string, chatRoomId: string, chatType: ChatType, type: string) {
+		if (!ws) {
+			console.error('❌ WebSocket belum diinisialisasi');
+			return;
+		}
+
+		if (ws.readyState !== WebSocket.OPEN) {
+			console.error('❌ WebSocket is not open');
+			return;
+		}
+
+		ws.send(
 			JSON.stringify({
-				type: 'message',
-				to: 'user321', // nanti ganti dengan userId dinamis
-				from: 'user123',
-				text: message
+				chatType,
+				roomId: chatRoomId,
+				text,
+				type
 			})
 		);
+		console.log('📨 Pesan dikirim:', text);
 	}
 
 	return { connect, sendMessage };

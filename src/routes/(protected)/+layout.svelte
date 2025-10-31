@@ -4,13 +4,14 @@
 	import Sidebar from '../../components/Sidebar.svelte';
 
 	let { children } = $props();
-	const { connect } = createSocket();
+	const { connect, sendMessage } = createSocket();
 
-	onMount(() => {
-		connect();
+	onMount(async () => {
+		await connect(); // tunggu sampai benar-benar connected
+		console.log('✅ WebSocket connected');
 	});
 </script>
 
-<Sidebar >
+<Sidebar>
 	{@render children()}
 </Sidebar>
