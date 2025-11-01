@@ -6,9 +6,11 @@ export interface AuthSession  {
 
 export interface MessageStore  {
 	text: string;
+  id: string;
 	type: string;
-	chatType: ChatEnum;
+  senderId: string;
 	roomId: string;
+  createdAt: string;
 };
 
 export interface ResponseSession {

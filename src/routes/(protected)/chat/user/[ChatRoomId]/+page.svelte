@@ -1,65 +1,72 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { useStore } from '@tanstack/svelte-store';
-	import { ChatEnum } from '../../../../../common/enums/chat';
 	import { createSocket } from '../../../../../common/helpers/socket';
 	import { authSessionStore } from '../../../../../common/stores/authSession';
 	import { page } from '$app/stores';
+	import { createQuery } from '@tanstack/svelte-query';
+	import { chatService } from '../../../../../services/chatService';
+	import { messageStore } from '../../../../../common/stores/message';
+	import type { MessageStore } from '../../../../../common/types';
 
 	const { sendMessage } = createSocket();
-	let inputText = '';
-	let user = useStore(authSessionStore)
-	let ChatRoomId = $page.params.ChatRoomId
+	let inputText = $state('');
+	let user = useStore(authSessionStore);
 
-
+	let ChatRoomId = $state('');
+	$effect(() => {
+		ChatRoomId = $page.params.ChatRoomId!;
+	});
 	function handleSend() {
 		if (inputText.trim() !== '') {
-			sendMessage(inputText, ChatRoomId!, "message");
+			sendMessage(inputText, ChatRoomId!, 'message');
 			inputText = '';
 		}
 	}
 
-	const dummyChats = [
-		{
-			id: 1,
-			chat_id: 1,
-			sender_id: 1,
-			content: 'Halo, apa kabar?'
-		},
-		{
-			id: 2,
-			chat_id: 1,
-			sender_id: 2,
-			content: 'Halo, apa kabar?'
-		},
-		{
-			id: 3,
-			chat_id: 1,
-			sender_id: 1,
-			content: 'Halo, apa kabar?'
-		},
-		{
-			id: 4,
-			chat_id: 1,
-			sender_id: 2,
-			content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus saepe vitae quod. Incidunt aliquid dicta atque autem beatae animi accusantium illo, voluptas quod pariatur vero laborum iusto corrupti, perferendis dolores."
-		}
-	];
+	const queryMessages = createQuery(() => ({
+		queryKey: ['messages', ChatRoomId],
+		queryFn: () => chatService.getChats(ChatRoomId!)
+	}));
+	let messagesOnStore = useStore(messageStore);
+	let messages = $state<MessageStore[]>([]);
+	$effect(() => {
+		messages = messagesOnStore.current?.message || [];
+	});
 </script>
 
 <div class="overflow-auto flex-1 mb-2 p-3 space-y-2">
 	<div class="flex flex-col gap-2">
-		{#each dummyChats as chat (chat.id)}
-			{#if chat.sender_id === 1}
+		{#each queryMessages.data as chat (chat.id)}
+			{#if chat.sender_id === user.current?.id && chat.chat_room_id === ChatRoomId}
 				<div class="flex justify-end">
 					<p class="bg-blue-500 text-white px-3 py-2 rounded-br-none rounded-2xl shadow-md">
-						{chat.content}
+						{chat.text}
 					</p>
 				</div>
-			{:else}
+			{:else if chat.sender_id !== user.current?.id && chat.chat_room_id === ChatRoomId}
 				<div class="flex justify-start">
-					<p class="bg-gray-300 text-gray-800 px-3 py-2 max-w-[70%] rounded-2xl rounded-tl-none shadow-md">
-						{chat.content}
+					<p
+						class="bg-gray-300 text-gray-800 px-3 py-2 max-w-[70%] rounded-2xl rounded-tl-none shadow-md"
+					>
+						{chat.text} dari query
+					</p>
+				</div>
+			{/if}
+		{/each}
+		{#each messages as message (message.id)}
+			{#if message.senderId === user.current?.id  && message.roomId === ChatRoomId}
+				<div class="flex justify-end">
+					<p class="bg-blue-500 text-white px-3 py-2 rounded-br-none rounded-2xl shadow-md">
+						{message.text}
+					</p>
+				</div>
+			{:else if message.senderId !== user.current?.id && message.roomId === ChatRoomId}
+				<div class="flex justify-start">
+					<p
+						class="bg-gray-300 text-gray-800 px-3 py-2 max-w-[70%] rounded-2xl rounded-tl-none shadow-md"
+					>
+						{message.text} dari store
 					</p>
 				</div>
 			{/if}
