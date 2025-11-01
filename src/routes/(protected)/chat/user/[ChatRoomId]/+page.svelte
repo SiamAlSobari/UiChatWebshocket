@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { ChatType } from '../../../../../common/enums/chatType';
+	import { ChatEnum } from '../../../../../common/enums/chat';
 	import { createSocket } from '../../../../../common/helpers/socket';
 
 	const { sendMessage } = createSocket();
@@ -8,7 +8,7 @@
 
 	function handleSend() {
 		if (inputText.trim() !== '') {
-			sendMessage(inputText, "bcac1a51-3c35-4ced-88b2-422640fc4a4c",ChatType.PRIVATE, "message");
+			sendMessage(inputText, "bcac1a51-3c35-4ced-88b2-422640fc4a4c",ChatEnum.PRIVATE, "message");
 			inputText = '';
 		}
 	}

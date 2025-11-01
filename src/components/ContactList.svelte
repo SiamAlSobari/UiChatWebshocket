@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { setCurrentUser } from '../common/stores/currentUser';
+	import { setSelectedUserStore } from '../common/stores/selectedUser';
 	import type { Contact } from '../common/types';
 
 	interface Props {
@@ -23,7 +23,7 @@
 				<button
 					onclick={() => (
 						(currentUsers = contact.user.id),
-						setCurrentUser(contact.user.id),
+						setSelectedUserStore(contact.user.id),
 						goto(`/chat/user/${contact.id}`)
 					)}
 					class={`flex items-center gap-3 px-3 py-2 ${

@@ -1,47 +1,107 @@
-import type { ChatType } from "../enums/chatType"
+import type { ChatEnum } from "../enums/chat";
 
-export type AuthSession = {
-    id: string,
+export interface AuthSession  {
+	id: string;
+};
+
+export interface MessageStore  {
+	text: string;
+	type: string;
+	chatType: ChatEnum;
+	roomId: string;
+};
+
+export interface ResponseSession {
+	user: AuthSession;
+};
+
+export interface LoginDto {
+	email: string;
+	password: string;
+};
+
+
+export interface User {
+  id: string;
+  email: string;
+  hashed_password: string;
+  createdAt: Date;
+  updatedAt: Date;
+
+  profile: Profile;
+  sendedMessages: Message[];
+  chatRooms: ChatRoomMember[];
+  contactsOf: Contact[];
+  contacts: Contact[];
 }
 
-export type MessageStore = {
-    text: string
-    type: string
-    chatType: ChatType
-    roomId: string
+export interface Profile {
+  id: string;
+  user_id: string;
+  full_name: string;
+  image_url: string;
+  createdAt: Date;
+  updatedAt: Date;
+
+  user: User;
 }
 
+export interface Contact {
+  id: string;
+  user_id: string;
+  contact_name: string;
+  contact_id: string;
+  createdAt: Date;
+  updatedAt: Date;
 
-export type ResponseSession = {
-    user: AuthSession
+  user: User;
+  contact: User;
 }
 
-export type LoginDto = {
-    email: string,
-    password: string
+export type ChatType = 'PRIVATE' | 'GROUP';
+
+export interface ChatRoom {
+  id: string;
+  type: ChatType;
+  createdAt: Date;
+  updatedAt: Date;
+
+  messages?: Message[];
+  members?: ChatRoomMember[];
+  groups?: Group[];
 }
 
-export type User = {
-    id: string,
-    email: string,
-    profile: Profile
+export interface ChatRoomMember {
+  id: string;
+  chat_room_id: string;
+  user_id: string;
+  createdAt: Date;
+  updatedAt: Date;
 
-    contacts: Contact[]
+  chatRoom?: ChatRoom;
+  user?: User;
 }
 
-export type Profile = {
-    id: string,
-    full_name: string
-    image_url: string
+export interface Group {
+  id: string;
+  group_name: string;
+  group_avatar: string;
+  chat_room_id: string;
+  createdAt: Date;
+  updatedAt: Date;
 
-    user: User
+  chatRoom?: ChatRoom;
 }
 
-export type Contact = {
-    id: string,
-    contact_id: string,
-    contact_name: string
-    user_id: string
+export interface Message {
+  id: string;
+  chat_room_id: string;
+  sender_id: string;
+  text: string;
+  createdAt: Date;
+  updatedAt: Date;
 
-    user: User
+  chatRoom?: ChatRoom;
+  sender?: User;
 }
+

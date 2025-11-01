@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as InputGroup from '$lib/components/ui/input-group/index';
 	import { SearchIcon } from '@lucide/svelte';
-	import { setCurrentUser } from '../common/stores/currentUser';
 	import { Button } from '$lib/components/ui/button/index';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { contactService } from '../services/contactService';

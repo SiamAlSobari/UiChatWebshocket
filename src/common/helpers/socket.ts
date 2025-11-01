@@ -1,13 +1,13 @@
 import { writable } from 'svelte/store';
-import { authSession } from '../stores/authSession';
-import type { ChatType } from '../enums/chatType';
 import { useStore } from '@tanstack/svelte-store';
+import { authSessionStore } from '../stores/authSession';
+import type { ChatEnum } from '../enums/chat';
 
 let ws: WebSocket | null = null;
 export const socketStore = writable<WebSocket | null>(null);
 
 export function createSocket() {
-	const user = useStore(authSession);
+	const user = useStore(authSessionStore);
 
 	async function connect() {
 		if (ws && ws.readyState === WebSocket.OPEN) {
@@ -49,7 +49,7 @@ export function createSocket() {
 		});
 	}
 
-	function sendMessage(text: string, chatRoomId: string, chatType: ChatType, type: string) {
+	function sendMessage(text: string, chatRoomId: string, chatType: ChatEnum, type: string) {
 		if (!ws) {
 			console.error('❌ WebSocket belum diinisialisasi');
 			return;

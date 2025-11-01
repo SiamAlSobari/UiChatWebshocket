@@ -3,7 +3,7 @@
 	import UserList from './ChatList.svelte';
 	import Blank from './Blank.svelte';
 	import { useStore } from '@tanstack/svelte-store';
-	import { selectedUser } from '../common/stores/currentUser';
+	import { selectedUserStore } from '../common/stores/selectedUser';
 
 	let { children } = $props();
 
@@ -12,7 +12,7 @@
 	];
 
 	let currentNavId = $state(1);
-	const currentUserId = useStore(selectedUser);
+	const currentUserId = useStore(selectedUserStore);
 
 </script>
 

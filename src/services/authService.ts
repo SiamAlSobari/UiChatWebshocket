@@ -2,7 +2,7 @@ import type { AxiosInstance } from "axios";
 import axios from "axios";
 import { BASE_URL } from "../common/helpers/baseUrl";
 import type { AuthSession, LoginDto, ResponseSession } from "../common/types";
-import { setAuthSession } from "../common/stores/authSession";
+import { setAuthSessionStore } from "../common/stores/authSession";
 
 class AuthService {
     private api : AxiosInstance;
@@ -15,7 +15,7 @@ class AuthService {
 
     public async startSession() : Promise<{data: ResponseSession}> {
         const response = await this.api.get<{data: ResponseSession}>("/auth/session");
-        setAuthSession(response.data.data.user);
+        setAuthSessionStore(response.data.data.user);
         return response.data;
     }
 
