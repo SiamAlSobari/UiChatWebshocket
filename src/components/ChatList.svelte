@@ -5,7 +5,6 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { contactService } from '../services/contactService';
 	import ContactList from './ContactList.svelte';
-	let currentUsers = $state('');
 	let searchUser = $state('');
 	let queryContact = createQuery(() => ({
 		queryKey: ['contact'],
@@ -38,6 +37,5 @@
 		contact={filtered}
 		isLoading={queryContact.isLoading}
 		isSuccess={queryContact.isSuccess}
-		{currentUsers}
 	/>
 </section>

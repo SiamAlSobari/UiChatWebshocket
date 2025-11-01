@@ -1,14 +1,20 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
+	import { useStore } from '@tanstack/svelte-store';
 	import { ChatEnum } from '../../../../../common/enums/chat';
 	import { createSocket } from '../../../../../common/helpers/socket';
+	import { authSessionStore } from '../../../../../common/stores/authSession';
+	import { page } from '$app/stores';
 
 	const { sendMessage } = createSocket();
 	let inputText = '';
+	let user = useStore(authSessionStore)
+	let ChatRoomId = $page.params.ChatRoomId
+
 
 	function handleSend() {
 		if (inputText.trim() !== '') {
-			sendMessage(inputText, "bcac1a51-3c35-4ced-88b2-422640fc4a4c",ChatEnum.PRIVATE, "message");
+			sendMessage(inputText, ChatRoomId!, "message");
 			inputText = '';
 		}
 	}
@@ -40,7 +46,6 @@
 		}
 	];
 </script>
-
 
 <div class="overflow-auto flex-1 mb-2 p-3 space-y-2">
 	<div class="flex flex-col gap-2">

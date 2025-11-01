@@ -3,8 +3,8 @@ import type { MessageStore } from '../types';
 
 export const messageStore = new Store<{ message: MessageStore[] } | null>(null);
 
-export const addMessageStore = (newmEssages: MessageStore) => {
+export const addMessageStore = (newMessages: MessageStore) => {
 	messageStore.setState((state) => ({
-		message: [...(state?.message || []), newmEssages]
+		message: [...(state?.message || []), newMessages]
 	}));
 };

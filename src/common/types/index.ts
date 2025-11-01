@@ -66,9 +66,9 @@ export interface ChatRoom {
   createdAt: Date;
   updatedAt: Date;
 
-  messages?: Message[];
-  members?: ChatRoomMember[];
-  groups?: Group[];
+  messages: Message[];
+  members: ChatRoomMember[];
+  groups: Group[];
 }
 
 export interface ChatRoomMember {

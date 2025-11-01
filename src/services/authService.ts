@@ -1,7 +1,7 @@
 import type { AxiosInstance } from "axios";
 import axios from "axios";
 import { BASE_URL } from "../common/helpers/baseUrl";
-import type { AuthSession, LoginDto, ResponseSession } from "../common/types";
+import type {  LoginDto, ResponseSession } from "../common/types";
 import { setAuthSessionStore } from "../common/stores/authSession";
 
 class AuthService {

@@ -42,14 +42,17 @@ export function createSocket() {
 						console.log(`📨 User ${data.userId} connected`);
 						console.log(`Dengan RoomId: ${JSON.stringify(data.roomIds)}`);
 						break;
-					default:
+					case 'message':
 						console.log('📨 Pesan diterima:', event.data);
+						break;
+					default:
+						console.log('📨 Pesan tidak diketahui:', event.data);
 				}
 			};
 		});
 	}
 
-	function sendMessage(text: string, chatRoomId: string, chatType: ChatEnum, type: string) {
+	function sendMessage(text: string, roomId: string, type: string) {
 		if (!ws) {
 			console.error('❌ WebSocket belum diinisialisasi');
 			return;
@@ -62,8 +65,7 @@ export function createSocket() {
 
 		ws.send(
 			JSON.stringify({
-				chatType,
-				roomId: chatRoomId,
+				roomId: roomId,
 				text,
 				type
 			})

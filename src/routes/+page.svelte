@@ -4,7 +4,6 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { useStore } from '@tanstack/svelte-store';
-	import { authSession } from '../common/stores/authSession';
 
 	let show = $state(false);
 
@@ -12,7 +11,6 @@
 		show = true;
 	});
 
-	const user = useStore(authSession)
 </script>
 
 <div

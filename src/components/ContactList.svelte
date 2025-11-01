@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { setSelectedUserStore } from '../common/stores/selectedUser';
+	import { useStore } from '@tanstack/svelte-store';
+	import { selectedUserStore, setSelectedUserStore } from '../common/stores/selectedUser';
 	import type { Contact } from '../common/types';
 
 	interface Props {
 		contact: Contact[];
 		isSuccess: boolean;
 		isLoading: boolean;
-		currentUsers: string;
 	}
-	let { contact, isLoading, isSuccess, currentUsers }: Props = $props();
+	let { contact, isLoading, isSuccess }: Props = $props();
+	let selectedUser = useStore(selectedUserStore);
 </script>
 
 <div class="flex flex-col gap-1 overflow-y-auto">
@@ -22,17 +23,16 @@
 			{#each contact as contact (contact.id)}
 				<button
 					onclick={() => (
-						(currentUsers = contact.user.id),
-						setSelectedUserStore(contact.user.id),
-						goto(`/chat/user/${contact.id}`)
+						setSelectedUserStore(contact.contact.id),
+						goto(`/chat/user/${contact.contact.chatRooms[0].chat_room_id}`)
 					)}
 					class={`flex items-center gap-3 px-3 py-2 ${
-						currentUsers === contact.user.id ? 'bg-gray-200' : ''
+						selectedUser.current === contact.contact.id ? 'bg-gray-200' : ''
 					} rounded-lg hover:bg-gray-100 cursor-pointer transition`}
 				>
 					<img
-						src={contact.user.profile.image_url}
-						alt={contact.user.profile.full_name}
+						src={contact.contact.profile.image_url}
+						alt={contact.contact.profile.full_name}
 						class="w-10 h-10 rounded-full object-cover border border-gray-200"
 					/>
 					<div>
