@@ -8,3 +8,7 @@ export const setMessageStore = (newMessages: MessageStore) => {
 		message: [...(state?.message || []), newMessages]
 	}));
 };
+
+export const clearMessageStore = () => {
+	messageStore.setState(null);
+};

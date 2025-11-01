@@ -48,10 +48,10 @@ export function createSocket() {
 						case 'message':
 							console.log('💬 Pesan diterima:', data);
 							setMessageStore({
-								roomId: data.roomId,
+								chat_room_id: data.chat_room_id,
 								text: data.text,
 								type: data.type as ChatEnum,
-								senderId: data.senderId,
+								sender_id: data.sender_id,
 								createdAt: data.createdAt,
 								id: data.id
 							});

@@ -8,8 +8,8 @@ export interface MessageStore  {
 	text: string;
   id: string;
 	type: string;
-  senderId: string;
-	roomId: string;
+  sender_id: string;
+  chat_room_id: string;
   createdAt: string;
 };
 
