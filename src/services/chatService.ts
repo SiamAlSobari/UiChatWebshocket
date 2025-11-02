@@ -2,6 +2,7 @@ import type { AxiosInstance } from 'axios';
 import axios from 'axios';
 import { BASE_URL } from '../common/helpers/baseUrl';
 import type { Message } from '../common/types';
+import { setAllMessageStore } from '../common/stores/message';
 
 class ChatService {
 	private api: AxiosInstance;
@@ -14,6 +15,7 @@ class ChatService {
 
 	public async getChats(chatRoomId: string): Promise<Message[]> {
 		const response = await this.api.get(`/chat/messages/${chatRoomId}`);
+		setAllMessageStore(response.data.data);
 		return response.data.data;
 	}
 }

@@ -9,6 +9,11 @@ export const setMessageStore = (newMessages: MessageStore) => {
 	}));
 };
 
+
+export const setAllMessageStore = (newMessages: MessageStore[]) => {
+	messageStore.setState({ message: newMessages });
+};
+
 export const clearMessageStore = () => {
 	messageStore.setState(null);
 };

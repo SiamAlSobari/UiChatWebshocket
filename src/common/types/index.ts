@@ -7,9 +7,18 @@ export interface AuthSession  {
 export interface MessageStore  {
 	text: string;
   id: string;
-	type: string;
+	type?: string;
   sender_id: string;
   chat_room_id: string;
+  createdAt: string;
+  statuses: MessageStatus[]
+};
+
+interface MessageStatus  {
+  id: string;
+  status : 'SENT' | 'DELIVERED' | 'READ';
+  message_id: string;
+  user_id: string;
   createdAt: string;
 };
 
@@ -105,5 +114,6 @@ export interface Message {
 
   chatRoom?: ChatRoom;
   sender?: User;
+  statuses?: MessageStatus[]
 }
 

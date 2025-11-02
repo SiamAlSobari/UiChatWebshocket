@@ -54,8 +54,12 @@ export function createSocket() {
 								type: data.type as ChatEnum,
 								sender_id: data.sender_id,
 								createdAt: data.createdAt,
-								id: data.id
+								id: data.id,
+								statuses: data.statuses
 							});
+							break;
+						case 'delivered_message':
+							console.log('📨 Pesan dikirim:', data);
 							break;
 						case 'user_online':
 							console.log('👤 User online:', data);
@@ -101,8 +105,8 @@ export function createSocket() {
 			return;
 		}
 
-		ws.send(JSON.stringify({ type,roomId }));
+		ws.send(JSON.stringify({ type, roomId }));
 	}
 
-	return { connect, sendMessage ,isReadMessage};
+	return { connect, sendMessage, isReadMessage };
 }
