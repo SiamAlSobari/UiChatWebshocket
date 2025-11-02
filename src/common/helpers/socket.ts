@@ -1,112 +1,112 @@
-import { writable } from 'svelte/store';
+import { browser } from '$app/environment';
 import { useStore } from '@tanstack/svelte-store';
 import { authSessionStore } from '../stores/authSession';
-import type { ChatEnum } from '../enums/chat';
-import { setMessageStore } from '../stores/message';
+import { markReadMessages, setMessageStore } from '../stores/message';
 import { setAllUserOnline } from '../stores/userOnline';
 
-let ws: WebSocket | null = null;
-export const socketStore = writable<WebSocket | null>(null);
-
 export function createSocket() {
-	const user = useStore(authSessionStore);
+	let socket: WebSocket | null = null;
+	let userId: string | null = null;
 
-	async function connect() {
-		if (ws && ws.readyState === WebSocket.OPEN) {
-			console.log('♻️ WebSocket sudah aktif');
+	function connect() {
+		if (!browser) return;
+
+		const user = useStore(authSessionStore);
+		if (!user?.current?.id) {
+			console.log('❌ No user ID found');
 			return;
 		}
 
-		return new Promise<void>((resolve, reject) => {
-			ws = new WebSocket(`ws://localhost:3000/api/ws/connect?userId=${user?.current?.id}`);
-			socketStore.set(ws);
+		userId = user.current.id;
+		const wsUrl = `http://localhost:3000/api/ws/connect?userId=${userId}`;
 
-			ws.onopen = () => {
-				console.log('✅ WebSocket connected');
-				resolve();
-			};
+		socket = new WebSocket(wsUrl);
 
-			ws.onerror = (err) => {
-				console.error('⚠️ WebSocket error:', err);
-				reject(err);
-			};
+		socket.onopen = () => {
+			console.log('✅ WebSocket connected');
+		};
 
-			ws.onclose = (event) => {
-				console.log('❌ Disconnected:', event.reason);
-				socketStore.set(null);
-				ws = null;
-			};
+		socket.onmessage = (event) => {
+			try {
+				const data = JSON.parse(event.data);
+				console.log('📨 WebSocket message:', data.type);
 
-			ws.onmessage = (event) => {
-				try {
-					const data = JSON.parse(event.data);
-					console.log('📩 Data dari server:', data);
+				switch (data.type) {
+					case 'message':
+						setMessageStore(data);
+						break;
 
-					switch (data.type) {
-						case 'connected':
-							console.log(`📨 User ${data.userId} connected dengan RoomId:`, data.roomIds);
-							break;
-						case 'message':
-							console.log('💬 Pesan diterima:', data);
-							setMessageStore({
-								chat_room_id: data.chat_room_id,
-								text: data.text,
-								type: data.type as ChatEnum,
-								sender_id: data.sender_id,
-								createdAt: data.createdAt,
-								id: data.id,
-								statuses: data.statuses
-							});
-							break;
-						case 'delivered_message':
-							console.log('📨 Pesan dikirim:', data);
-							break;
-						case 'user_online':
-							console.log('👤 User online:', data);
-							setAllUserOnline(data.usersOnline);
-							break;
-						case 'user_offline':
-							console.log('👤 User offline:', data.userId);
-							setAllUserOnline(data.usersOnline);
-							break;
-						default:
-							console.log('📦 Event tidak dikenal:', data);
-					}
-				} catch (err) {
-					console.error('❌ Gagal parse pesan:', event.data, err);
+					case 'read_message':
+						console.log('📖 REAL-TIME Read message event:', data);
+						if (data.readerId && data.roomId) {
+							// REAL-TIME: Update store dengan data dari backend
+							markReadMessages(data.readerId, data.roomId, data.updatedMessages);
+						}
+						break;
+					case 'user_status_online':
+						console.log('📖 REAL-TIME User status event:', data);
+						setAllUserOnline(data.users);
+						break;
+
+					case 'user_status_offline':
+						console.log('📖 REAL-TIME User status event:', data);
+						setAllUserOnline(data.users);
+						break;
+
+					default:
+						console.log('Other event:', data.type);
 				}
-			};
-		});
-	}
+			} catch (error) {
+				console.error('❌ Error parsing WebSocket message:', error);
+			}
+		};
 
+		socket.onclose = () => {
+			console.log('❌ WebSocket disconnected, reconnecting...');
+			setTimeout(connect, 3000);
+		};
+
+		socket.onerror = (error) => {
+			console.error('❌ WebSocket error:', error);
+		};
+	}
 	function sendMessage(text: string, roomId: string, type = 'message') {
-		if (!ws) {
+		if (!socket) {
 			console.error('❌ WebSocket belum diinisialisasi');
 			return;
 		}
 
-		if (ws.readyState !== WebSocket.OPEN) {
+		if (socket.readyState !== WebSocket.OPEN) {
 			console.error('❌ WebSocket belum open');
 			return;
 		}
 
-		ws.send(JSON.stringify({ roomId, text, type }));
+		socket.send(JSON.stringify({ roomId, text, type }));
 		console.log('📨 Pesan dikirim:', text);
 	}
 
-	function isReadMessage(roomId: string, type = 'read_message') {
-		if (!ws) {
-			console.error('❌ WebSocket belum diinisialisasi');
-			return;
+	// REAL-TIME: Ganti nama function untuk konsistensi
+	function markAsRead(roomId: string, readerId: string) {
+		if (socket && socket.readyState === WebSocket.OPEN) {
+			const readMessage = { roomId, readerId, type: 'read_message' };
+			socket.send(JSON.stringify(readMessage));
+			console.log('📖 REAL-TIME: Mark as read triggered');
+		} else {
+			console.error('❌ WebSocket not connected for mark as read');
 		}
-
-		if (ws.readyState !== WebSocket.OPEN) {
-			console.error('❌ WebSocket belum open');
-			return;
-		}
-
-		ws.send(JSON.stringify({ type, roomId }));
 	}
 
-	return { connect, sendMessage, isReadMessage };
+	// Auto connect
+	
+	connect()
+	return {
+		connect,
+		sendMessage,
+		markAsRead, // Ganti dari isReadMessage ke markAsRead
+		disconnect: () => {
+			if (socket) {
+				socket.close();
+			}
+		},
+	};
 }

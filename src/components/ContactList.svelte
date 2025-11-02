@@ -57,9 +57,7 @@
 						</p>
 						<p
 							class={`text-xs ${
-								isUserOnline(contact.contact.id)
-									? 'text-green-600 font-medium'
-									: 'text-gray-500'
+								isUserOnline(contact.contact.id) ? 'text-green-600 font-medium' : 'text-gray-500'
 							}`}
 						>
 							{isUserOnline(contact.contact.id) ? 'Online' : 'Offline'}

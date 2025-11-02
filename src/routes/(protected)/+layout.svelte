@@ -7,7 +7,7 @@
 	const { connect, sendMessage } = createSocket();
 
 	onMount(async () => {
-		await connect(); // tunggu sampai benar-benar connected
+		await connect();
 		console.log('✅ WebSocket connected');
 	});
 </script>

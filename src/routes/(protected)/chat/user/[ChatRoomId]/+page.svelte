@@ -4,14 +4,19 @@
 	import { createSocket } from '../../../../../common/helpers/socket';
 	import { authSessionStore } from '../../../../../common/stores/authSession';
 	import { page } from '$app/stores';
-	import { clearMessageStore, messageStore } from '../../../../../common/stores/message';
+	import { 
+		clearMessageStore, 
+		messageStore, 
+		setAllMessageStore 
+	} from '../../../../../common/stores/message';
 	import type { MessageStore } from '../../../../../common/types';
 	import { getDisplayStatus, getStatusIcon } from '../../../../../common/helpers/messageStatus';
 	import type { PageProps } from './$types';
 	import { chatService } from '../../../../../services/chatService';
 	import { formatDate } from '../../../../../common/helpers/formatDate';
+	import { onMount } from 'svelte';
 
-	const { sendMessage, isReadMessage } = createSocket();
+	const { sendMessage, markAsRead } = createSocket();
 	let inputText = $state('');
 	let user = useStore(authSessionStore);
 	let ChatRoomId = $state('');
@@ -38,17 +43,41 @@
 		}
 	}
 
+	// REAL-TIME: Mark messages as read ketika masuk room
+	function triggerMarkAsRead() {
+		if (ChatRoomId && user.current?.id) {
+			console.log('🔔 REAL-TIME: Marking messages as read for room:', ChatRoomId);
+			markAsRead(ChatRoomId, user.current.id);
+		}
+	}
+
 	$effect(() => {
 		const newChatRoom = $page.params.ChatRoomId!;
 		if (ChatRoomId !== newChatRoom) {
 			ChatRoomId = newChatRoom;
 			clearMessageStore();
-			chatService.getChats(newChatRoom);
-			isReadMessage(ChatRoomId!);
+			
+			// Load messages untuk room baru
+			chatService.getChats(newChatRoom).then(() => {
+				console.log('✅ Messages loaded for room:', ChatRoomId);
+				
+				// REAL-TIME: Trigger mark as read setelah messages loaded
+				setTimeout(() => {
+					triggerMarkAsRead();
+				}, 300);
+			});
+			
 			scrollToBottom();
 			console.log('ChatRoomId:', ChatRoomId);
 		}
 		messages = messagesOnStore.current?.message || [];
+	});
+
+	// REAL-TIME: Juga trigger mark as read ketika component mount
+	onMount(() => {
+		setTimeout(() => {
+			triggerMarkAsRead();
+		}, 1000);
 	});
 </script>
 
