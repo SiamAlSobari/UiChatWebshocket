@@ -3,6 +3,7 @@ import { useStore } from '@tanstack/svelte-store';
 import { authSessionStore } from '../stores/authSession';
 import type { ChatEnum } from '../enums/chat';
 import { setMessageStore } from '../stores/message';
+import { setAllUserOnline } from '../stores/userOnline';
 
 let ws: WebSocket | null = null;
 export const socketStore = writable<WebSocket | null>(null);
@@ -55,6 +56,14 @@ export function createSocket() {
 								createdAt: data.createdAt,
 								id: data.id
 							});
+							break;
+						case 'user_online':
+							console.log('👤 User online:', data);
+							setAllUserOnline(data.usersOnline);
+							break;
+						case 'user_offline':
+							console.log('👤 User offline:', data.userId);
+							setAllUserOnline(data.usersOnline);
 							break;
 						default:
 							console.log('📦 Event tidak dikenal:', data);
