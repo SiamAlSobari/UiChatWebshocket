@@ -90,5 +90,19 @@ export function createSocket() {
 		console.log('📨 Pesan dikirim:', text);
 	}
 
-	return { connect, sendMessage };
+	function isReadMessage(roomId: string, type = 'read_message') {
+		if (!ws) {
+			console.error('❌ WebSocket belum diinisialisasi');
+			return;
+		}
+
+		if (ws.readyState !== WebSocket.OPEN) {
+			console.error('❌ WebSocket belum open');
+			return;
+		}
+
+		ws.send(JSON.stringify({ type,roomId }));
+	}
+
+	return { connect, sendMessage ,isReadMessage};
 }

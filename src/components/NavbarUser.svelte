@@ -1,18 +1,40 @@
 <script lang="ts">
-	const user = {
-		id: 1,
-		name: 'John Doe',
-		avatar:
-			'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80'
-	};
+	import { createQuery } from '@tanstack/svelte-query';
+	import { selectedUserStore } from '../common/stores/selectedUser';
+	import { useStore } from '@tanstack/svelte-store';
+	import { contactService } from '../services/contactService';
+	import { userOnlineStore } from '../common/stores/userOnline';
+
+	let selectedUser = useStore(selectedUserStore);
+
+	let queryProfile = createQuery(() => ({
+		queryKey: ['profile'],
+		queryFn: () => contactService.getContact(selectedUser.current!)
+	}));
+	let userOnline = useStore(userOnlineStore);
+	const isUserOnline = (id: string) => userOnline.current.includes(id);
 </script>
 
 <nav class=" bg-amber-100/45 border-b-2 border-gray-200 rounded-md">
 	<div class="flex gap-1 p-3 flex-row">
-		<img src={user.avatar} alt={user.name} class="w-10 h-10 rounded-full object-cover" />
+		<img
+			src={queryProfile.data?.contact.profile.image_url}
+			alt={queryProfile.data?.contact_name}
+			class="w-10 h-10 rounded-full object-cover"
+		/>
 		<div class="flex flex-col">
-			<p class="font-medium text-gray-800 text-sm">{user.name}</p>
-			<p class="text-xs text-gray-500">Online</p>
+			<p class="font-medium text-gray-800 text-sm">{queryProfile.data?.contact_name}</p>
+			{#if queryProfile.data}
+				<p
+					class={`text-xs ${
+						isUserOnline(queryProfile.data!.contact_id)
+							? 'text-green-600 font-medium'
+							: 'text-gray-500'
+					}`}
+				>
+					{isUserOnline(queryProfile.data!.contact_id) ? 'Online' : 'Offline'}
+				</p>
+			{/if}
 		</div>
 	</div>
 </nav>

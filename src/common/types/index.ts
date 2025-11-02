@@ -100,8 +100,8 @@ export interface Message {
   chat_room_id: string;
   sender_id: string;
   text: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 
   chatRoom?: ChatRoom;
   sender?: User;

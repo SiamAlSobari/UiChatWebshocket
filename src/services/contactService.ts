@@ -17,6 +17,11 @@ class ContactService {
         const response = await this.api.get("/contact");
         return response.data.data;
     }
+
+    public async getContact(userId: string) : Promise<Contact> {
+        const response = await this.api.get(`/contact/${userId}`);
+        return response.data.data;
+    }
 }
 
 export const contactService = new ContactService();
