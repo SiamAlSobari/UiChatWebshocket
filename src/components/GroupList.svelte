@@ -1,4 +1,3 @@
-
 <script lang="ts">
     const dummtGroup = [
         {
@@ -19,8 +18,21 @@
     ]
 </script>
 
+<div class="flex flex-col gap-2 overflow-y-auto p-2">
+    {#each dummtGroup as group (group.group_id)}
+        <button
+            class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer transition"
+            on:click={() => console.log(`Clicked ${group.group_name}`)}
+        >
+            <!-- Avatar -->
+            <img 
+                src={group.group_avatar} 
+                alt={group.group_name} 
+                class="w-10 h-10 rounded-full object-cover border border-gray-200"
+            />
 
-
-<div class="flex flex-col gap-1 overflow-y-auto">
-    <!-- implement group -->
+            <!-- Group Name -->
+            <p class="font-medium text-gray-800">{group.group_name}</p>
+        </button>
+    {/each}
 </div>
