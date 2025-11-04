@@ -5,6 +5,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { contactService } from '../services/contactService';
 	import ContactList from './ContactList.svelte';
+	import GroupList from './GroupList.svelte';
 	let searchUser = $state('');
 	let queryContact = createQuery(() => ({
 		queryKey: ['contact'],
@@ -15,6 +16,8 @@
 		const contact = queryContact?.data ?? [];
 		return contact.filter((c) => c.contact_name.toLowerCase().includes(searchUser.toLowerCase()));
 	});
+
+	let currentTabs = $state<'contact' | 'group'>('contact');
 </script>
 
 <section
@@ -29,13 +32,21 @@
 		</InputGroup.Root>
 	</div>
 	<div class="flex gap-2">
-		<Button variant="outline" class="text-[15px]">Poeple</Button>
-		<Button variant="outline" class="text-[15px]">Groups</Button>
+		<Button onclick={() => (currentTabs = 'contact')} variant="outline" class="text-[15px]"
+			>Poeple</Button
+		>
+		<Button onclick={() => (currentTabs = 'group')} variant="outline" class="text-[15px]"
+			>Groups</Button
+		>
 	</div>
 
-	<ContactList
-		contact={filtered}
-		isLoading={queryContact.isLoading}
-		isSuccess={queryContact.isSuccess}
-	/>
+	{#if (currentTabs = 'contact')}
+		<ContactList
+			contact={filtered}
+			isLoading={queryContact.isLoading}
+			isSuccess={queryContact.isSuccess}
+		/>
+	{:else}
+		<GroupList />
+	{/if}
 </section>
